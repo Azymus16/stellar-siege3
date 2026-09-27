@@ -1,0 +1,147 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/upgrade_choice_popup.gd" id="1"]
+
+[node name="UpgradePopup" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.02, 0.02, 0.06, 0.72)
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 130.0
+offset_top = 130.0
+offset_right = 1150.0
+offset_bottom = 590.0
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+offset_left = 0.0
+offset_top = 16.0
+offset_right = 1020.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+text = "Choisis une amélioration"
+
+[node name="Cards" type="HBoxContainer" parent="Panel"]
+offset_left = 30.0
+offset_top = 60.0
+offset_right = 990.0
+offset_bottom = 440.0
+theme_override_constants/separation = 20
+[node name="Card1" type="Panel" parent="Panel/Cards"]
+custom_minimum_size = Vector2(300, 380)
+
+[node name="Icon" type="Label" parent="Panel/Cards/Card1"]
+offset_left = 0.0
+offset_top = 14.0
+offset_right = 300.0
+offset_bottom = 74.0
+theme_override_font_sizes/font_size = 42
+horizontal_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/Cards/Card1"]
+offset_left = 10.0
+offset_top = 84.0
+offset_right = 290.0
+offset_bottom = 116.0
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="DescLabel" type="Label" parent="Panel/Cards/Card1"]
+offset_left = 16.0
+offset_top = 124.0
+offset_right = 284.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SelectButton" type="Button" parent="Panel/Cards/Card1"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 380.0
+focus_mode = 0
+flat = true
+self_modulate = Color(1, 1, 1, 0)
+[node name="Card2" type="Panel" parent="Panel/Cards"]
+custom_minimum_size = Vector2(300, 380)
+
+[node name="Icon" type="Label" parent="Panel/Cards/Card2"]
+offset_left = 0.0
+offset_top = 14.0
+offset_right = 300.0
+offset_bottom = 74.0
+theme_override_font_sizes/font_size = 42
+horizontal_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/Cards/Card2"]
+offset_left = 10.0
+offset_top = 84.0
+offset_right = 290.0
+offset_bottom = 116.0
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="DescLabel" type="Label" parent="Panel/Cards/Card2"]
+offset_left = 16.0
+offset_top = 124.0
+offset_right = 284.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SelectButton" type="Button" parent="Panel/Cards/Card2"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 380.0
+focus_mode = 0
+flat = true
+self_modulate = Color(1, 1, 1, 0)
+[node name="Card3" type="Panel" parent="Panel/Cards"]
+custom_minimum_size = Vector2(300, 380)
+
+[node name="Icon" type="Label" parent="Panel/Cards/Card3"]
+offset_left = 0.0
+offset_top = 14.0
+offset_right = 300.0
+offset_bottom = 74.0
+theme_override_font_sizes/font_size = 42
+horizontal_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/Cards/Card3"]
+offset_left = 10.0
+offset_top = 84.0
+offset_right = 290.0
+offset_bottom = 116.0
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="DescLabel" type="Label" parent="Panel/Cards/Card3"]
+offset_left = 16.0
+offset_top = 124.0
+offset_right = 284.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SelectButton" type="Button" parent="Panel/Cards/Card3"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 380.0
+focus_mode = 0
+flat = true
+self_modulate = Color(1, 1, 1, 0)

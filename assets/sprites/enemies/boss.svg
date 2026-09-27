@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220">
+<defs>
+<radialGradient id="bossCore" cx="50%" cy="45%" r="60%">
+<stop offset="0%" stop-color="#ffdfff"/><stop offset="35%" stop-color="#b23bff"/><stop offset="70%" stop-color="#420a66"/><stop offset="100%" stop-color="#0a0018"/>
+</radialGradient>
+<radialGradient id="bossGlow" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#ff7bf0" stop-opacity="0.55"/><stop offset="100%" stop-color="#ff7bf0" stop-opacity="0"/>
+</radialGradient>
+</defs>
+<circle cx="110" cy="110" r="105" fill="url(#bossGlow)"/>
+<g stroke="#1a0330" stroke-width="3" fill="#2b0a4a">
+<polygon points="110,10 130,55 110,100 90,55"/>
+<polygon points="110,220 130,175 110,130 90,175"/>
+<polygon points="10,110 55,130 100,110 55,90"/>
+<polygon points="220,110 175,130 130,110 175,90"/>
+</g>
+<circle cx="110" cy="110" r="60" fill="url(#bossCore)" stroke="#1a0330" stroke-width="3"/>
+<circle cx="110" cy="110" r="20" fill="#fff0ff"/>
+<circle cx="110" cy="110" r="10" fill="#ff2fe0"/>
+</svg>
