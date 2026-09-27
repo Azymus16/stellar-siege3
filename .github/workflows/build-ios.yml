@@ -1,0 +1,97 @@
+name: Build iOS (non signé)
+
+on:
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: "4.3-stable"
+  GODOT_VERSION_DIR: "4.3.stable"
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v4
+
+      - name: Télécharger Godot (édition macOS)
+        timeout-minutes: 5
+        run: |
+          curl -L -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_macos.universal.zip"
+          unzip -q godot.zip
+          chmod +x "Godot.app/Contents/MacOS/Godot"
+          sudo mv Godot.app /Applications/Godot.app
+          echo "GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot" >> $GITHUB_ENV
+
+      - name: Télécharger les modules d'export (export templates)
+        timeout-minutes: 5
+        run: |
+          curl -L -o templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz"
+          mkdir -p "$HOME/Library/Application Support/Godot/export_templates/${GODOT_VERSION_DIR}"
+          unzip -q templates.tpz -d /tmp/godot_templates
+          cp -r /tmp/godot_templates/templates/* "$HOME/Library/Application Support/Godot/export_templates/${GODOT_VERSION_DIR}/"
+
+      - name: Importer le projet une première fois (construit le cache des classes et des textures)
+        timeout-minutes: 5
+        run: |
+          "$GODOT_BIN" --headless --editor --quit-after 20 --path . || true
+          echo "--- Vérification du cache d'import ---"
+          ls -la .godot || echo "Pas de dossier .godot généré !"
+
+      - name: Vérifier que le preset iOS existe
+        run: |
+          test -f export_presets.cfg || (echo "export_presets.cfg est absent à la racine du repo !" && exit 1)
+          grep -q 'platform="iOS"' export_presets.cfg || (echo "Aucun preset iOS trouvé dans export_presets.cfg" && exit 1)
+          echo "OK, preset iOS trouvé."
+
+      - name: Exporter le projet Xcode depuis Godot
+        timeout-minutes: 10
+        run: |
+          mkdir -p build/ios
+          "$GODOT_BIN" --headless --path . --export-release "iOS" build/ios/StellarSiege.xcodeproj
+          echo "--- Contenu de build/ios ---"
+          ls -la build/ios
+
+      - name: Détecter le scheme Xcode généré
+        id: scheme
+        run: |
+          cd build/ios
+          PROJECT_FILE=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n1)
+          echo "Projet détecté : $PROJECT_FILE"
+          SCHEME=$(xcodebuild -list -project "$PROJECT_FILE" -json | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['project']['schemes'][0])")
+          echo "Scheme détecté : $SCHEME"
+          echo "project_file=$PROJECT_FILE" >> "$GITHUB_OUTPUT"
+          echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+
+      - name: Compiler un .app non signé (signature désactivée, Sideloadly s'en chargera)
+        timeout-minutes: 15
+        run: |
+          cd build/ios
+          xcodebuild \
+            -project "${{ steps.scheme.outputs.project_file }}" \
+            -scheme "${{ steps.scheme.outputs.scheme }}" \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath xcbuild \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            build
+
+      - name: Empaqueter en .ipa non signé
+        run: |
+          cd build/ios/xcbuild/Build/Products/Release-iphoneos
+          APP_DIR=$(find . -maxdepth 1 -name "*.app" | head -n1)
+          echo "App trouvée : $APP_DIR"
+          mkdir Payload
+          cp -r "$APP_DIR" Payload/
+          zip -qr "$GITHUB_WORKSPACE/StellarSiege-unsigned.ipa" Payload
+
+      - name: Publier le .ipa en tant qu'artefact téléchargeable
+        uses: actions/upload-artifact@v4
+        with:
+          name: StellarSiege-ipa-non-signe
+          path: StellarSiege-unsigned.ipa
+          retention-days: 14
